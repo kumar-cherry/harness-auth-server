@@ -1,6 +1,6 @@
 import sbt.Keys.resolvers
 
-name := "harness"
+name := "harness-auth-server"
 
 version := "0.3.0-SNAPSHOT"
 
