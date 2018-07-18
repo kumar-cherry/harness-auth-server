@@ -15,4 +15,5 @@ bash$ ./make-auth-server-distribution.sh
 bash$ sbt harnessAuthCommon/publish-local
 ```
 
-This will put harness dependencies in the local .ivy2 cache so when you build harness you will not get missing dependencies.
+This will put harness dependencies in the local .ivy2 cache so when you build harness you will not get missing dependencies. Harness does not need to run with the harness-auth-server (when not using authentication) but does have dependencies on the client API supplied by this build.
+
