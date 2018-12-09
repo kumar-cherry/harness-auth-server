@@ -12,7 +12,7 @@ jobs:
       -
         restore_cache:
           keys:
-            - sbt-maven-{{ .Branch }}
+            - auth-{{ checksum "build.sbt" }}
       -
         run:
           name: Build environment details
@@ -23,7 +23,7 @@ jobs:
           command: make build
       -
         save_cache:
-          key: sbt-maven-{{ .Branch }}
+          key: auth-{{ checksum "build.sbt" }}
           paths:
             - /root/.sbt
             - /root/.ivy2
