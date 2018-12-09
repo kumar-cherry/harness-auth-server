@@ -28,11 +28,11 @@ jobs:
             - /root/.sbt
             - /root/.ivy2
 
-  test:
-    docker:
-      - image: stackfeed/alpine
-    steps:
-      - run: echo "smoke test"
+  # test:
+  #   docker:
+  #     - image: alpine
+  #   steps:
+  #     - run: echo "unit testing or smth"
 
 workflows:
   version: 2
