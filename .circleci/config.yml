@@ -1,0 +1,42 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: actionml/harness-sdk:0.1
+
+    environment:
+      SDK_VERBOSE: yes
+
+    steps:
+      - checkout
+      -
+        restore_cache:
+          keys:
+            - sbt-maven-{{ .Branch }}
+      -
+        run:
+          name: Build environment details
+          command: /details.sh
+      -
+        run:
+          name: Build Harness Auth Server
+          command: make build
+      -
+        save_cache:
+          key: sbt-maven-{{ .Branch }}
+          paths:
+            - /root/.sbt
+            - /root/.ivy2
+
+  test:
+    docker:
+      - image: stackfeed/alpine
+    steps:
+      - run: echo "smoke test"
+
+workflows:
+  version: 2
+  default:
+    jobs:
+      - build
+      # - test
