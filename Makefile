@@ -5,20 +5,13 @@ HARNESS_ROOT := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 SBT_SYSTEM_SCALA ?= no
 SBT_URL ?= https://git.io/sbt
 SBT ?= $(HARNESS_ROOT)/sbt/sbt
-DIST := dist/
-
-SBT_OPTS ?=
-JAVA_PROPS ?=
+DIST ?= dist/
 
 VERSION := $(shell grep ^version build.sbt | grep -o '".*"' | sed 's/"//g')
+# Enforce version of Scala set in build.sbt (specificly passed to sbt later!)
 SCALA_VERSION := $(shell grep ^scalaVersion build.sbt | grep -o '".*"' | sed 's/"//g')
 
-# Enforce Scala version set in build.sbt
-# note: if it's not provided sbt build won't succeed!!!
-SBT_OPTS += ++$(SCALA_VERSION)
-
-
-# By default install sbtx locally if no SBT path provided
+# Install sbtx locally
 sbt:
 ifeq ($(SBT),$(HARNESS_ROOT)/sbt/sbt)
 	@ SBT_DIR="$$(dirname $(SBT))" && mkdir -p $$SBT_DIR && cd $$SBT_DIR && \
@@ -31,13 +24,13 @@ endif
 
 
 build: sbt
-	$(SBT) $(SBT_OPTS) $(JAVA_PROPS) -batch authServer/universal:stage
+	$(SBT) ++$(SCALA_VERSION) -batch authServer/universal:stage
 
 publish-local: build
-	$(SBT) $(SBT_OPTS) $(JAVA_PROPS) -batch harnessAuthCommon/publish-local
+	$(SBT) ++$(SCALA_VERSION) -batch harnessAuthCommon/publish-local
 
 clean: sbt
-	$(SBT) $(SBT_OPTS) $(JAVA_PROPS) -batch authServer/clean
+	$(SBT) ++$(SCALA_VERSION) -batch authServer/clean
 
 dist: clean clean-dist build
 	mkdir -p $(DIST) && cd $(DIST) && mkdir bin conf logs lib project
